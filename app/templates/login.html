@@ -1,0 +1,4 @@
+{% extends "base.html" %}
+{% block title %}Moderation sign-in · The Wall{% endblock %}
+{% block content %}<section class="detail-wrap card login-card"><span class="eyebrow">MODERATION</span><h1>Look after the conversation.</h1><p class="muted">Use the admin token configured for this wall.</p>
+<form method="post" action="/admin" class="stack"><input type="hidden" name="csrf_token" value="{{ csrf }}"><label for="token">Admin token</label><input id="token" type="password" name="token" required autocomplete="current-password"><button class="button">Sign in</button></form></section>{% endblock %}

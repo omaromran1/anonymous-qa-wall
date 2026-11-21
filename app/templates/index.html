@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <div class="eyebrow"><span class="live-dot"></span> YOUR CAMPUS, WITHOUT THE LABELS</div>
+  <h1>A little curiosity.<br>A lot of possibility.</h1>
+  <p>The question on your mind might be on someone else's, too.<br class="desktop-break"> Ask anonymously. Share what you know.</p>
+  <a class="button" href="#ask">Ask a question <span aria-hidden="true">↗</span></a>
+</section>
+<div class="wall-layout">
+  <section aria-label="Questions" class="feed">
+    <div class="section-heading"><h2>The conversation <span class="count">{{ total }}</span></h2></div>
+    <form method="get" class="filter-bar">
+      <label>Sort<select name="sort"><option value="newest" {% if sort == 'newest' %}selected{% endif %}>Newest</option><option value="votes" {% if sort == 'votes' %}selected{% endif %}>Most voted</option><option value="unanswered" {% if sort == 'unanswered' %}selected{% endif %}>Unanswered</option></select></label>
+      <label>Category<select name="category"><option value="">All categories</option>{% for c in settings.categories %}<option {% if category == c %}selected{% endif %}>{{ c }}</option>{% endfor %}</select></label>
+      <button class="filter-button">Apply</button>
+    </form>
+    {% for context in items %}
+      {% with item=context.item, kind=context.kind, question=context.question, owner=context.owner, voted=context.voted %}{% include "item.html" %}{% endwith %}
+    {% else %}
+      <div class="card empty"><span class="empty-icon">?</span><h3>Every conversation starts somewhere.</h3><p>No questions here yet. Yours could be the first.</p></div>
+    {% endfor %}
+    {% if pages > 1 %}<nav class="pagination" aria-label="Pagination">
+      {% if page > 1 %}<a href="/?page={{ page - 1 }}&sort={{ sort }}&category={{ category|urlencode }}">← Previous</a>{% endif %}
+      <span>Page {{ page }} of {{ pages }}</span>
+      {% if page < pages %}<a href="/?page={{ page + 1 }}&sort={{ sort }}&category={{ category|urlencode }}">Next →</a>{% endif %}
+    </nav>{% endif %}
+  </section>
+  <aside>
+    <section class="card ask-card" id="ask"><span class="eyebrow">A SAFE SPACE TO ASK</span><h2>What's on your mind?</h2><p class="muted">No sign-up. No spotlight. Just your question.</p>
+      <form method="post" action="/questions" class="stack">
+        <input type="hidden" name="csrf_token" value="{{ csrf }}">
+        <label for="question-text">Your question</label>
+        <textarea id="question-text" name="text" dir="auto" required minlength="10" maxlength="1000" rows="5" placeholder="Something you've always wanted to ask?"></textarea>
+        <span class="hint">10–1,000 characters. Arabic or English welcome.</span>
+        <label for="question-category">Category</label><select id="question-category" name="category">{% for c in settings.categories %}<option>{{ c }}</option>{% endfor %}</select>
+        <button class="button">Post anonymously <span aria-hidden="true">↗</span></button>
+      </form>
+    </section>
+    <div class="kind-note"><span aria-hidden="true">✳</span><div><strong>A small reminder</strong><p>There's a real person behind every question. Keep it helpful. Keep it kind.</p></div></div>
+    <p class="privacy-note">No accounts or names collected. Please don't include personal details in your post.</p>
+  </aside>
+</div>
+{% endblock %}

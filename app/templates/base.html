@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="htmx-config" content='{"allowEval":false,"includeIndicatorStyles":false}'>
+  <meta name="description" content="Ask freely. Learn together. An anonymous student question wall.">
+  <title>{% block title %}The Wall · Anonymous Q&A{% endblock %}</title>
+  <link rel="stylesheet" href="/static/style.css">
+  {% if settings.optional_google_font %}
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap">
+  {% endif %}
+  <script defer src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js"></script>
+  <script defer src="/static/app.js"></script>
+</head>
+<body>
+  <header class="topbar"><div class="container topbar-inner">
+    <a class="brand" href="/" aria-label="The Wall home"><span class="brand-icon">?</span> the wall<span class="brand-dot">.</span></a>
+    <span class="privacy-label">No names. Just ideas.</span>
+  </div></header>
+  <main class="container">
+    <div id="notice" role="status" aria-live="polite"></div>
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="container footer"><span>Ask freely. Be kind. Learn together.</span><a href="/admin">Moderation</a></footer>
+</body>
+</html>

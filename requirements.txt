@@ -1,0 +1,13 @@
+fastapi==0.162.5
+uvicorn==0.54.0
+SQLAlchemy==2.0.58
+pydantic==2.14.4
+pydantic-settings==2.15.0
+Jinja2==3.1.6
+python-multipart==0.0.32
+itsdangerous==2.2.0
+psycopg[binary]==3.3.9
+pytest==9.2.0
+httpx==0.28.1
+starlette==1.7.0
+python-dotenv==1.2.4

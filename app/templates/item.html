@@ -1,0 +1,30 @@
+<article id="{{ kind }}-{{ item.id }}" class="card post{% if kind == 'answer' and item.is_accepted %} accepted{% endif %}">
+  {% if item.is_hidden %}
+    <p class="muted" role="status">This {{ kind }} is hidden pending moderation.</p>
+  {% else %}
+    <div class="post-meta">
+      {% if kind == 'question' %}<span class="pill">{{ item.category }}</span>{% endif %}
+      {% if kind == 'answer' and item.is_accepted %}<span class="accepted-badge">✓ Accepted answer</span>{% endif %}
+      <span>Anonymous · <time datetime="{{ item.created_at.isoformat() }}">{{ item.created_at|relative }}</time></span>
+    </div>
+    <div class="post-text" dir="auto">{{ item.text }}</div>
+    <div class="post-actions">
+      <form method="post" action="/vote/{{ kind }}/{{ item.id }}" hx-post="/vote/{{ kind }}/{{ item.id }}" hx-target="closest article" hx-swap="outerHTML">
+        <input type="hidden" name="csrf_token" value="{{ csrf }}">
+        <button class="vote{% if voted %} voted{% endif %}" aria-pressed="{{ 'true' if voted else 'false' }}" aria-label="Toggle upvote for {{ kind }} {{ item.id }}">↑ <span>{{ item.vote_count }}</span></button>
+      </form>
+      {% if kind == 'question' %}<a class="text-link" href="/questions/{{ item.id }}">Join the conversation <span aria-hidden="true">↗</span></a>{% endif %}
+      {% if kind == 'answer' and owner %}
+      <form method="post" action="/answers/{{ item.id }}/accept">
+        <input type="hidden" name="csrf_token" value="{{ csrf }}">
+        <button class="quiet">{{ 'Unaccept' if item.is_accepted else 'Accept answer' }}</button>
+      </form>
+      {% endif %}
+      <form class="report-form" method="post" action="/report/{{ kind }}/{{ item.id }}" hx-post="/report/{{ kind }}/{{ item.id }}" hx-target="closest article" hx-swap="outerHTML">
+        <input type="hidden" name="csrf_token" value="{{ csrf }}">
+        <button class="quiet" aria-label="Report {{ kind }} {{ item.id }}">Report</button>
+      </form>
+    </div>
+    {% if message %}<p class="feedback" role="status">{{ message }}</p>{% endif %}
+  {% endif %}
+</article>

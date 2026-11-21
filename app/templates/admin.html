@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Moderation · The Wall{% endblock %}
+{% block content %}<div class="detail-wrap"><div class="section-heading"><h1>Moderation queue</h1><form method="post" action="/admin/logout"><input type="hidden" name="csrf_token" value="{{ csrf }}"><button class="quiet">Sign out</button></form></div>
+<p class="muted">Up to 100 questions and 100 answers, newest first. Resolve items to reveal older entries. Unhide also clears reports.</p>
+{% for kind, items in [('question', questions), ('answer', answers)] %}<h2>{{ kind|capitalize }}s</h2>
+{% for item in items %}<article class="card"><div class="post-meta">#{{ item.id }} · {{ item.report_count }} reports · {{ 'Hidden' if item.is_hidden else 'Visible' }}</div><p class="post-text" dir="auto">{{ item.text }}</p><div class="post-actions">
+<form method="post" action="/admin/{{ kind }}/{{ item.id }}/unhide"><input type="hidden" name="csrf_token" value="{{ csrf }}"><button class="filter-button">Unhide / clear reports</button></form>
+<form method="post" action="/admin/{{ kind }}/{{ item.id }}/delete"><input type="hidden" name="csrf_token" value="{{ csrf }}"><button class="danger">Permanently delete</button></form>
+</div></article>{% else %}<p class="muted">All clear. No reported {{ kind }}s.</p>{% endfor %}{% endfor %}</div>{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Question {{ question.id }} · The Wall{% endblock %}
+{% block content %}
+<div class="detail-wrap">
+  <a class="back-link" href="/">← Back to the wall</a>
+  <h1 class="detail-title">One question. Many perspectives.</h1>
+  {% with item=question_context.item, kind=question_context.kind, owner=question_context.owner, voted=question_context.voted %}{% include "item.html" %}{% endwith %}
+  {% if question_context.owner %}<p class="owner-note">You're the asker. You can accept one answer using this browser. Keep its cookies to retain access.</p>{% endif %}
+  {% include "answers.html" %}
+</div>
+{% endblock %}

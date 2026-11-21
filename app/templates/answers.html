@@ -1,0 +1,16 @@
+<section id="answers-section">
+  <h2>Answers <span class="count">{{ answers|length }}</span></h2>
+  {% if message %}<p class="feedback" role="status">{{ message }}</p>{% endif %}
+  {% for context in answers %}
+    {% with item=context.item, kind=context.kind, question=context.question, owner=context.owner, voted=context.voted %}{% include "item.html" %}{% endwith %}
+  {% else %}<div class="card empty"><h3>Know something that could help?</h3><p>Be the first to share an answer.</p></div>{% endfor %}
+  <section class="card"><h2>Add your perspective</h2>
+    <form method="post" action="/questions/{{ question.id }}/answers" hx-post="/questions/{{ question.id }}/answers" hx-target="#answers-section" hx-swap="outerHTML" class="stack">
+      <input type="hidden" name="csrf_token" value="{{ csrf }}">
+      <label for="answer-text">Your anonymous answer</label>
+      <textarea id="answer-text" name="text" dir="auto" required minlength="2" maxlength="2000" rows="4" placeholder="Share what you know. A little help goes a long way."></textarea>
+      <span class="hint">2–2,000 characters. No personal details, please.</span>
+      <button class="button">Post answer <span aria-hidden="true">↗</span></button>
+    </form>
+  </section>
+</section>
